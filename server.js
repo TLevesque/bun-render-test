@@ -298,11 +298,13 @@ const server = Bun.serve({
   },
 });
 
+console.log("================================");
 console.log(`🚀 Server running on http://${HOST}:${PORT}`);
 console.log(`📁 Pages directory: ${pagesDir}`);
 console.log(`🔌 API directory: ${apiDir}`);
 console.log(`🌍 Environment: ${NODE_ENV}`);
-console.log(`🎯 Health check available at: http://${HOST}:${PORT}/health`);
+console.log(`🏥 Health check: http://${HOST}:${PORT}/health`);
+console.log("================================");
 
 // Graceful shutdown
 process.on("SIGINT", () => {
@@ -316,3 +318,184 @@ process.on("SIGTERM", () => {
   server.stop();
   process.exit(0);
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+// import { resolve, join } from "path";
+// import { existsSync } from "fs";
+
+// // ===== RENDER.COM CONFIGURATION =====
+// const PORT = process.env.PORT || 10000; // Render uses port 10000 by default
+// const HOST = "0.0.0.0"; // CRITICAL: Must be 0.0.0.0
+// const NODE_ENV = process.env.NODE_ENV || "production";
+// // ====================================
+
+// const pagesDir = resolve("./pages");
+// const apiDir = resolve("./api");
+
+// async function loadPage(pathname) {
+//   pathname = pathname === "/" ? "/index" : pathname;
+//   pathname = pathname.split("?")[0];
+//   const pagePath = join(pagesDir, `${pathname}.js`);
+
+//   if (existsSync(pagePath)) {
+//     try {
+//       const module = await import(pagePath);
+//       return module.default;
+//     } catch (error) {
+//       console.error(`Error loading page: ${pagePath}`, error);
+//       return null;
+//     }
+//   }
+
+//   return null;
+// }
+
+// async function loadApiHandler(pathname) {
+//   pathname = pathname.replace(/^\/api/, "");
+//   pathname = pathname.split("?")[0];
+//   const apiPath = join(apiDir, `${pathname}.js`);
+
+//   if (existsSync(apiPath)) {
+//     try {
+//       const module = await import(apiPath);
+//       return module.default;
+//     } catch (error) {
+//       console.error(`Error loading API handler: ${apiPath}`, error);
+//       return null;
+//     }
+//   }
+
+//   return null;
+// }
+
+// const server = Bun.serve({
+//   port: PORT,
+//   hostname: HOST, // Explicitly set hostname
+
+//   async fetch(req) {
+//     const url = new URL(req.url);
+//     const pathname = url.pathname;
+
+//     console.log(`${req.method} ${pathname}`);
+
+//     // Health check endpoint for Render.com
+//     if (pathname === "/health" || pathname === "/healthz") {
+//       return new Response(
+//         JSON.stringify({
+//           status: "ok",
+//           timestamp: new Date().toISOString(),
+//           environment: NODE_ENV,
+//           port: PORT,
+//         }),
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//             "Access-Control-Allow-Origin": "*",
+//           },
+//         }
+//       );
+//     }
+
+//     // API routes
+//     if (pathname.startsWith("/api")) {
+//       const handler = await loadApiHandler(pathname);
+
+//       if (handler) {
+//         try {
+//           const response = await handler(req);
+//           response.headers.set("Access-Control-Allow-Origin", "*");
+//           response.headers.set(
+//             "Access-Control-Allow-Methods",
+//             "GET, POST, PUT, DELETE, OPTIONS"
+//           );
+//           response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+//           return response;
+//         } catch (error) {
+//           console.error("API Error:", error);
+//           return new Response(
+//             JSON.stringify({ error: "Internal server error" }),
+//             {
+//               status: 500,
+//               headers: {
+//                 "Content-Type": "application/json",
+//                 "Access-Control-Allow-Origin": "*",
+//               },
+//             }
+//           );
+//         }
+//       }
+
+//       return new Response(JSON.stringify({ error: "API endpoint not found" }), {
+//         status: 404,
+//         headers: {
+//           "Content-Type": "application/json",
+//           "Access-Control-Allow-Origin": "*",
+//         },
+//       });
+//     }
+
+//     // Static files
+//     if (
+//       pathname.startsWith("/public/") ||
+//       pathname.endsWith(".css") ||
+//       pathname.endsWith(".js") ||
+//       pathname.endsWith(".ico")
+//     ) {
+//       const filePath = pathname.startsWith("/public/")
+//         ? pathname
+//         : `/public${pathname}`;
+
+//       const file = Bun.file(`.${filePath}`);
+
+//       if (await file.exists()) {
+//         return new Response(file);
+//       }
+//     }
+
+//     // Page routes
+//     const pageHandler = await loadPage(pathname);
+
+//     if (pageHandler) {
+//       try {
+//         return await pageHandler(req);
+//       } catch (error) {
+//         console.error("Page Error:", error);
+//         return new Response("Internal Server Error", { status: 500 });
+//       }
+//     }
+
+//     // 404 Not Found
+//     return new Response(
+//       `<!DOCTYPE html>
+//       <html>
+//         <head>
+//           <title>404 - Not Found</title>
+//           <link rel="stylesheet" href="/public/styles.css">
+//         </head>
+//         <body>
+//           <div class="container">
+//             <div class="header">
+//               <h1>404 - Page Not Found</h1>
+//               <p>The page you're looking for doesn't exist.</p>
+//             </div>
+//             <nav class="navigation">
+//               <a href="/">Home</a>
+//               <a href="/login">Login</a>
+//             </nav>
+//           </div>
+//         </body>
+//       </html>`,
+//       {
+//         status: 404,
+//         headers: { "Content-Type": "text/html" },
+//       }
+//     );
+//   },
+
+//   error(error) {
+//     console.error("Server error:", error);
+//     return new Response("Internal Server Error", { status: 500 });
+//   },
+// });
+
