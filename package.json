@@ -1,0 +1,43 @@
+{
+  "name": "bun-filesystem-router",
+  "version": "1.0.0",
+  "description": "A Next.js-style file system router web server built with Bun.js",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "bun run server.js",
+    "dev": "bun run --watch server.js",
+    "prod": "NODE_ENV=production bun run server.js",
+    "build": "echo 'No build step required for Bun.js'",
+    "test": "bun test",
+    "lint": "echo 'Add your linter here'",
+    "format": "echo 'Add your formatter here'"
+  },
+  "keywords": [
+    "bun",
+    "bunjs",
+    "web-server",
+    "file-system-router",
+    "api",
+    "rest-api",
+    "nextjs-style",
+    "router"
+  ],
+  "author": {
+    "name": "Your Name",
+    "email": "your.email@example.com",
+    "url": "https://yourwebsite.com"
+  },
+  "license": "MIT",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/bun-filesystem-router.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/bun-filesystem-router/issues"
+  },
+  "homepage": "https://github.com/yourusername/bun-filesystem-router#readme"
+}
