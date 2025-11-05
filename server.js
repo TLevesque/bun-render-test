@@ -1,10 +1,12 @@
 import { resolve, join } from "path";
 import { existsSync } from "fs";
 
-// Load environment variables
+// Render.com provides PORT via environment variable
+// MUST bind to 0.0.0.0, not localhost!
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || "localhost";
-const NODE_ENV = process.env.NODE_ENV || "development";
+const HOST = "0.0.0.0"; // ← CRITICAL: Must be 0.0.0.0 for Render
+const NODE_ENV = process.env.NODE_ENV || "production";
+
 const API_PREFIX = process.env.API_PREFIX || "/api";
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
 
@@ -296,11 +298,11 @@ const server = Bun.serve({
   },
 });
 
-logger.info(`🚀 Server running in ${NODE_ENV} mode`);
-logger.info(`📡 Listening on http://${HOST}:${PORT}`);
-logger.info(`📄 Pages available at http://${HOST}:${PORT}/`);
-logger.info(`🔌 API available at http://${HOST}:${PORT}${API_PREFIX}/`);
-logger.info(`💚 Health check at http://${HOST}:${PORT}/health`);
+console.log(`🚀 Server running on http://${HOST}:${PORT}`);
+console.log(`📁 Pages directory: ${pagesDir}`);
+console.log(`🔌 API directory: ${apiDir}`);
+console.log(`🌍 Environment: ${NODE_ENV}`);
+console.log(`🎯 Health check available at: http://${HOST}:${PORT}/health`);
 
 // Graceful shutdown
 process.on("SIGINT", () => {
